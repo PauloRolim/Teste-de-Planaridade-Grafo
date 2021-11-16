@@ -11,78 +11,76 @@ public class GraphTraverser<T> {
 
     private Set<T> searched = new HashSet<T>();
 
-    /** A map used for colorings of the Grafo. */
+    /** Um map usado para colorir o grafo */
     private Map<T, Integer> coloring = null;
 
-    /** A variable to hold the Grafo resulting from an operation. */
+    /** Variável que guarda o grafo resultante de uma operação */
     private Grafo<T> result = null;
 
-    /** A target vertex. */
+    /** Vértice alvo. */
     private T goal = null;
 
-    /** The next vertex in a traversal (used for walkCycle). */
+    /** O próximo vértice a ser percorrido (usado para percorrer um ciclo). */
     private T next = null;
 
-    /** The previous vertex in a traversal (used for walkCycle). */
+    /** O vértice anterior a ser perccorido (usado para percorrer um ciclo). */
     private T prev = null;
 
     /**
-     * Constructor for a GrafoTraverser object.
+     * Construtor para a classe GrafoTraverser.
      * 
-     * @param Grafo
      */
     public GraphTraverser( Grafo<T> grafo ) {
         this.grafo = grafo;
     }
 
     /**
-     * Tests whether this graph is bipartite.
+     * Função que testa se o grafo é bipartido.
      *
-     * @return      True if it is bipartite.
      */
     public boolean eBipartido() {
-        if ( grafo.numVertices() == 0 ) return true;
+        if (grafo.numVertices() == 0) return true;
         coloring = new HashMap<T, Integer>();
-        return eBipartido( grafo.getVertices().iterator().next(), true );
-    }
+        return eBipartido(grafo.getVertices().iterator().next(), true);
+    } 
 
-    /*
+    /**
      *Função que testa se o grafo é bipartido
      * O parametro é o proprio grafo, e retorna true se o grafo 
      * for bipartido.
      * Utiliza a propriedade de que um grafo bipartido pode ser
      * colorido com apenas duas cores.
      */
-    private boolean eBipartido( T v, boolean color ) {
-        if ( coloring.containsKey( v ) ) {
-            if ( !coloring.get( v ).equals( color ? 1 : 0 ) ) {
+    private boolean eBipartido(T v, boolean color) {
+        if (coloring.containsKey(v)) {
+            if (!coloring.get(v).equals(color? 1 : 0)) {
                 return false;
             } else {
                 return true;
             }
         } else {
-            coloring.put( v, color ? 1 : 0 );
+            coloring.put(v, color? 1 : 0);
             boolean bipartite = true;
-            for ( T n : grafo.getNeighbors( v ) ) {
-                bipartite = bipartite && eBipartido( n, !color );
+            for (T n : grafo.getNeighbors(v)) {
+                bipartite = bipartite && eBipartido(n, !color);
             }
             return bipartite;
         }
     }
 
     /**
-     * Walks around a cycle, starting from an arbitrary vertex
-     * and going in an arbitrary direction.
+     * Função que percorre um ciclo, inicia num vértice aleatório
+     * e percorre o ciclo sempre pelos vértices adjacentes ao
+     * vertice escolhido.
      *
-     * @return      The next vertex in the walk.
      */
     public T walkCycle() {
         if ( next == null ) {
             prev = grafo.getVertices().iterator().next();
-            next = grafo.getNeighbors( prev ).iterator().next();
+            next = grafo.getNeighbors(prev).iterator().next();
         } else {
-            for ( T n : grafo.getNeighbors( next ) ) {
-                if ( !n.equals( prev ) ) {
+            for (T n : grafo.getNeighbors(next)){
+                if (!n.equals(prev)) {
                     prev = next;
                     next = n;
                     break;
@@ -93,27 +91,21 @@ public class GraphTraverser<T> {
     }
 
     /**
-     * Finds a path between two vertices in the grafo.
+     * Encontra um caminho viável entre dois vértices do grafo
      *
-     * @param start     The starting vertex.
-     * @param end       The ending vertex.
-     * @param banned    A collection of sets this path can't pass through.
-     * @return          The path between the two vertices.
      */
     public Grafo<T> findPath( T start, T end, Collection<T> banned ) {
         searched.clear();
         searched.addAll( banned );
         result = new Grafo<T>();
         goal = end;
-        boolean pathFound = findPath( start );
+        boolean pathFound = findPath( start ); //chama a função acessória findPath
         return pathFound ? result : null;
     }
 
     /**
-     * Private worker function for findPath.
+     * Auxiliar da função encontrar caminho.
      *
-     * @param v     The current node in the path.
-     * @return      True if the path was found.
      */
     private boolean findPath( T v ) {
         searched.add( v );
@@ -132,22 +124,20 @@ public class GraphTraverser<T> {
     }
 
     /**
-     * Finds an arbitrary cycle in a biconnected graph.
-     *
-     * @return      A cycle.
+     * Encontra um ciclo no grafo de maneira aleatória,
+     * caso encontre o ciclo ele retorna o vértice.
      */
     public Grafo<T> findCycle() {
         searched.clear();
         result = new Grafo<T>();
         goal = grafo.getVertices().iterator().next();
-        return findCycle( goal );
+        return findCycle( goal ); //chama a função acessória
     }
 
     /**
-     * Private worker function for findCycle.
-     *
-     * @param v     The current node in the cycle.
-     * @return      A cycle.
+     * Função privada que cria o ciclo testando se
+     * há um caminho possível e se esse caminho forma
+     * um ciclo
      */
     private Grafo<T> findCycle( T v ) {
         searched.add( v );
@@ -166,10 +156,11 @@ public class GraphTraverser<T> {
     }
 
     /**
-     * Splits the graph into pieces using the given cycle.
+     * Divide o grafo em duas partes. Cria um pedaço em forma de ciclo, e
+     * separa o restante dos vértices na outra parte.
      *
-     * @param cycle     The cycle to split the graph with.
-     * @return          A set containing all the pieces of the graph.
+     * @param cycle     Ciclo extraído do grafo
+     * @return          O conjunto de todos vértices do grafo
      */
     public Set<Grafo<T>> splitIntoPieces ( Grafo<T> cycle ) {
         searched.clear();
@@ -189,14 +180,13 @@ public class GraphTraverser<T> {
     }
 
     /**
-     * Private helper function for splitIntoPieces.  Creates a piece
-     * (connected without going through the cycle) of the graph
-     * from a cycle and a starting node.
+     * Função auxiliar.  Extrai do grafo um ciclo e o vértice de onde 
+     * esse cilco inicia-se.
      *
-     * @param cycle     The separating cycle.
-     * @param v         The current vertex.
+     * @param cycle     O ciclo extraído do grafo.
+     * @param v         O vértice atual
      *
-     * @return          This piece of the graph.
+     * @return          Essa parte do grafo
      */
     private void makePiece( Grafo<T> cycle, T v ) {
         if ( cycle.hasVertex( v ) ) return;

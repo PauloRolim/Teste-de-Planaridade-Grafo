@@ -17,8 +17,8 @@ import java.util.Set;
     //Construtor da classe
     public Grafo(){}
 
-    /*Constrói um grafo idêntico o grafo dado como entrada na memória
-     *O parametro source é o grafo de entrada
+    /*Constrói um grafo idêntico o grafo dado como entrada.
+     *O parametro source é o grafo de entrada.
     */
     public Grafo(Grafo<T> source) {
         for (T v : source.getVertices()) {
@@ -81,14 +81,16 @@ import java.util.Set;
         return count/2;
     }
 
-    /*Função que retorna todos os vértices vizinhos ao vértice fornecido
-     *Onde o praâmetro v é o vértice cujos vizinhos serão retornados
+    /**
+     * Função que retorna todos os vértices vizinhos ao vértice fornecido
+     * Onde o praâmetro v é o vértice cujos vizinhos serão retornados
     */
     public Set<T> getNeighbors(T v) {
         return adjacencyMap.get(v);
     }
 
-    /*Função que retorna o grau de um vértice fornecido
+    /**
+     * Função que retorna o grau de um vértice fornecido
      *Onde o parametro v é o vértice que terá seu grau como retorno da função 
      *Quando a função retorna -1 significa que o vértice informado não existe no grafo
      */
@@ -107,7 +109,8 @@ import java.util.Set;
         return adjacencyMap.keySet();
     }
 
-    /*Função booleana que verifica se o vértice informado existe no grafo.
+    /**
+     * Função booleana que verifica se o vértice informado existe no grafo.
      *O parametro v é o vértice que será verificado.
      *Retorna true se encontrar o vértice fornecido, e false caso não encontre.
      */
@@ -115,7 +118,8 @@ import java.util.Set;
         return adjacencyMap.containsKey( v );
     }
 
-    /*Função que verifica se a aresta fornecida está presente no grafo
+    /**
+     *Função que verifica se a aresta fornecida está presente no grafo
      *O parametro v1 é o primeiro vértice da aresta
      *O parmetro v2 é o segundo vértice da aresta
      */
@@ -168,7 +172,9 @@ import java.util.Set;
         return true;        
     }
 
-    /*Função que testa se o grafo é bipartido
+    /**
+     * Função que testa se o grafo é bipartido
+     * 
      * O parametro é o proprio grafo, e retorna true se o grafo 
      * for bipartido
      *

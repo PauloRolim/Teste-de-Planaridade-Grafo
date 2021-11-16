@@ -48,12 +48,11 @@ public class TestPlanarity {
     }
 
     /**
-     * Tests the planarity of a BICONNECTED graph.  Has to suppress warnings
-     * because Java is silly and can't handle arrays of generics properly.
+     * Testa a planaridade de um grafo biconexo. 
      *
-     * @param graph     The graph to test for planarity.
-     * @param cycle     A cycle within the above graph, preferably separating.
-     * @return          Whether the graph is planar or not.
+     * @param graph     O grafo cuja planaridade será testada.
+     * @param cycle     O ciclo do grafo fornecido.
+     * @return          Se o grafo é planar ou não.
      */
     @SuppressWarnings("unchecked")
     public <T> boolean testPlanarity( Grafo<T> grafo, Grafo<T> cycle ) {
@@ -62,7 +61,7 @@ public class TestPlanarity {
         }
         Set<Grafo<T>> pieces = Grafo.splitIntoPieces( grafo, cycle );
         for ( Grafo<T> piece : pieces ) {
-            if ( !Grafo.isPath( piece ) ) {     // Don't bother if the piece is a path.
+            if ( !Grafo.isPath( piece ) ) {    
 
                 // Need a starting vertex that is an attachment point between the piece and the cycle.
                 T start = null;
